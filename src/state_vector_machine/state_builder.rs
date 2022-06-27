@@ -1,4 +1,5 @@
 use num::{Complex, Float};
+use num_cpus;
 
 use super::state::QState;
 
@@ -21,6 +22,7 @@ pub struct QStateBuilder<T: Float + Clone + Default + Sync + Send> {
   state: Vec<Complex<T>>,
   qubits_number: usize,
   task_size: Option<usize>,
+  threads_number: usize,
 }
 
 impl <T: Float + Clone + Default + Sync + Send> QStateBuilder<T> {
@@ -31,6 +33,7 @@ impl <T: Float + Clone + Default + Sync + Send> QStateBuilder<T> {
         state: vec,
         qubits_number: qubits_number,
         task_size: None,
+        threads_number: num_cpus::get_physical() - 1, //TODO: think more about the correct default number of threds
       }
     } else {
       panic!("Size of a state is not a power of 2.");
@@ -45,7 +48,13 @@ impl <T: Float + Clone + Default + Sync + Send> QStateBuilder<T> {
       state: vec,
       qubits_number: qubits_number,
       task_size: None,
+      threads_number: num_cpus::get_physical() - 1, //TODO: think more about the correct default number of threds
     }
+  }
+
+  pub fn set_threads_number(mut self, number: usize) -> Self {
+    self.threads_number = number;
+    self
   }
 
   pub fn set_task_size(mut self, size: usize) -> Self {
@@ -61,6 +70,7 @@ impl <T: Float + Clone + Default + Sync + Send> QStateBuilder<T> {
         state: self.state,
         qubits_number: self.qubits_number,
         task_size: s,
+        threads_number: self.threads_number,
       }
     } else { panic!("Task size has not been set.") }
   }

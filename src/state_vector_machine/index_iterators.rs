@@ -71,17 +71,3 @@ impl Iterator for Q1IdexIterator {
       }
   }
 }
-
-/*
-#[cfg(test)]
-mod tests {
-  use super::*;
-  #[test]
-  fn q1_index_iter_test() {
-    let it = Q1IdexIterator::new(3, 0, 16);
-    for i in it {
-      println!("{:?}", i);
-    }
-  }
-}
-*/

@@ -1,6 +1,5 @@
 use num::{Complex, Float};
 use std::fmt::Debug;
-use num_cpus;
 use crossbeam::{
   channel::bounded,
   scope,
@@ -22,6 +21,7 @@ pub struct QState<T: Float + Clone + Default + Sync + Send> {
   pub(super) state: Vec<Complex<T>>,
   pub(super) qubits_number: usize,
   pub(super) task_size: usize,
+  pub(super) threads_number: usize,
 }
 
 impl<T: Float + Clone + Default + Sync + Send> QState<T> {
@@ -44,7 +44,7 @@ impl<T: Float + Clone + Default + Sync + Send> QState<T> {
     idx2: usize,
   )
   {
-    let threads_number = num_cpus::get() - 1; //TODO: think more about the correct number of threds
+    let threads_number = self.threads_number;
     let task_iter = Q2TasksIterator::new(self, idx1, idx2, self.task_size);
     let(sn, rs) = bounded::<Q2Task<T>>(threads_number);
     scope(|s| {
@@ -76,7 +76,7 @@ impl<T: Float + Clone + Default + Sync + Send> QState<T> {
     idx: usize,
   )
   {
-    let threads_number = num_cpus::get() - 1; //TODO: think more about the correct number of threds
+    let threads_number = self.threads_number;
     let task_iter = Q1TasksIterator::new(self, idx, self.task_size);
     let(sn, rs) = bounded::<Q1Task<T>>(threads_number);
     scope(|s| {
@@ -107,7 +107,7 @@ impl<T: Float + Clone + Default + Sync + Send> QState<T> {
     idx: usize,
   ) -> [Complex<T>; 4]
   {
-    let threads_number = num_cpus::get() - 1; //TODO: think more about the correct number of threds
+    let threads_number = self.threads_number;
     let task_iter = Q1TasksIterator::new(self, idx, self.task_size);
     let(sn, rs) = bounded::<Q1Task<T>>(threads_number);
     let (dens_sender, dens_reciver) = bounded::<[Complex<T>; 4]>(threads_number);
