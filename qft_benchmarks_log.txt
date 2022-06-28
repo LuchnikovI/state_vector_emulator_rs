@@ -1,0 +1,1 @@
+Total computation time for 25 qubits is 9.1530705 sec

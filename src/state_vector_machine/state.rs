@@ -30,6 +30,10 @@ impl<T: Float + Clone + Default + Sync + Send> QState<T> {
     self.state
   }
 
+  pub fn get_copy_vec(&self) -> Vec<Complex<T>> {
+    self.state.clone()
+  }
+
   pub fn get_qubits_number(&self) -> usize { self.qubits_number }
 }
 

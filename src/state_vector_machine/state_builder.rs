@@ -1,5 +1,11 @@
+use std::iter::from_fn;
 use num::{Complex, Float};
 use num_cpus;
+use rand::{
+  Rng,
+  rngs::ThreadRng, distributions::Standard,
+  prelude::Distribution
+};
 
 use super::state::QState;
 
@@ -44,6 +50,24 @@ impl <T: Float + Clone + Default + Sync + Send> QStateBuilder<T> {
     let size = 2usize.pow(qubits_number as u32);
     let mut vec = vec![Complex::new(T::zero(), T::zero()); size];
     vec[0] = Complex::new(T::one(), T::zero());
+    QStateBuilder {
+      state: vec,
+      qubits_number: qubits_number,
+      task_size: None,
+      threads_number: num_cpus::get_physical() - 1, //TODO: think more about the correct default number of threds
+    }
+  }
+
+  pub fn new_random_unnormalized(
+    qubits_number: usize,
+    mut rng: ThreadRng,
+  ) -> Self 
+  where
+    Standard: Distribution<T>
+  {
+    let vec: Vec<Complex<T>> = from_fn(|| { Some(Complex::new(rng.gen(), rng.gen())) })
+      .take(2usize.pow(qubits_number as u32))
+      .collect();
     QStateBuilder {
       state: vec,
       qubits_number: qubits_number,

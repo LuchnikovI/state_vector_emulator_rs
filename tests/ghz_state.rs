@@ -1,10 +1,12 @@
 use num::{*, complex::ComplexFloat};
 use std::iter::zip;
 
-use simple_state_vec_emulator::{
+use state_vector_emulator_rs::{
   state_vector_machine::QStateBuilder,
-  Hadamard,
-  CX,
+  gates::{
+    get_hadamard,
+    get_cx,
+  },
 };
 
 #[test]
@@ -14,8 +16,8 @@ fn ghz_state_test() {
   let mut state = QStateBuilder::new_standard(qubits_number)
     .set_task_size(task_size)
     .get_qstate();
-  let h_gate = Hadamard!(f32);
-  let cx_gate = CX!(f32);
+  let h_gate = get_hadamard::<f32>();
+  let cx_gate = get_cx::<f32>();
   state.apply_1q_gate(&h_gate, 0);
   for i in 0..(qubits_number-1) {
     state.apply_2q_gate(&cx_gate, i, i+1);

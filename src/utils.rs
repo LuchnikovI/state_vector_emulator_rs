@@ -2,6 +2,7 @@ use num::{Float, Complex};
 
 use crate::state_vector_machine::QState;
 
+#[derive(Debug)]
 pub enum QInstruction<T>
 where
   T: Float + Clone + Default + Sync + Send
@@ -23,17 +24,20 @@ where
 {
   pub fn apply(&self, state: &mut QState<T>) {
     match self {
-      QInstruction::Q1 { idx: idx, gate: gate } => {
+      QInstruction::Q1 { idx, gate } => {
         state.apply_1q_gate(&gate[..], *idx)
       },
-      QInstruction::Q2 { idx1: idx1, idx2: idx2, gate: gate } => {
+      QInstruction::Q2 { idx1, idx2, gate } => {
         state.apply_2q_gate(&gate[..], *idx1, *idx2)
       },
     };
   }
 }
 
-pub fn execute<'a, T>(state: &'a mut QState<T>, instructions: impl IntoIterator<Item=&'a QInstruction<T>>)
+pub fn execute<T>(
+  state: &mut QState<T>,
+  instructions: impl IntoIterator<Item=QInstruction<T>>
+)
 where
   T: Float + Clone + Default + Sync + Send
 {

@@ -1,14 +1,14 @@
-#![feature(test)]
-extern crate test;
-
 pub mod state_vector_machine;
 pub mod gates;
-//pub mod utils;
-//pub mod layers;
+pub mod utils;
+pub mod layers;
 
-use state_vector_machine::{*, QStateBuilder};
+/*#![feature(test)]
+extern crate test;
+
+use state_vector_machine::QStateBuilder;
+use gates::get_partial_swap;
 use test::Bencher;
-use num::{Zero, One, Complex};
 
 macro_rules! q2_gate_bench {
   ($num_threads:expr, $num_qubits:expr, $task_size:expr, $name:ident) => {
@@ -20,7 +20,7 @@ macro_rules! q2_gate_bench {
       }).filter(|(x, y)| { x != y }).cycle();
       let threads_number = $num_threads;
       let task_size = $task_size;
-      let gate = Heisenberg!(f64, 0.3);
+      let gate = get_partial_swap(0.3f64);
       let mut state = QStateBuilder::<f64>::new_standard(number_of_qubits)
         .set_task_size(task_size)
         .set_threads_number(threads_number)
@@ -87,3 +87,4 @@ q2_gate_bench!(10, 25, 1024, qubits_number_25_threads_number__10_task_size_1024)
 q2_gate_bench!(12, 25, 1024, qubits_number_25_threads_number__12_task_size_1024);
 q2_gate_bench!(14, 25, 1024, qubits_number_25_threads_number__14_task_size_1024);
 q2_gate_bench!(16, 25, 1024, qubits_number_25_threads_number__16_task_size_1024);
+*/

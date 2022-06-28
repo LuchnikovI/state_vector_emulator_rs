@@ -1,5 +1,5 @@
 [package]
-name = "simple_state_vec_emulator"
+name = "state_vector_emulator_rs"
 version = "0.1.0"
 edition = "2021"
 
@@ -9,3 +9,5 @@ edition = "2021"
 num = "0.4.0"
 crossbeam = "0.8.1"
 num_cpus = "1.13.1"
+rand = "0.8.5"
+dft = "0.5.5"
